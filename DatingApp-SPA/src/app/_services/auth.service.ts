@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {map} from 'rxjs/operators';
-import { Response } from 'selenium-webdriver/http';
 
 @Injectable({
   providedIn: 'root'
@@ -22,4 +21,11 @@ constructor(private http: HttpClient) { }
       })
     );
   }
+
+
+  register(model: any) {
+    return this.http.post(this.baseUrl + 'register', model);
+  }
+
+
 }
