@@ -53,6 +53,8 @@ namespace DatingApplication.Migrations
 
                     b.Property<string>("Gender");
 
+                    b.Property<string>("Interests");
+
                     b.Property<string>("Introduction");
 
                     b.Property<string>("KnownAs");

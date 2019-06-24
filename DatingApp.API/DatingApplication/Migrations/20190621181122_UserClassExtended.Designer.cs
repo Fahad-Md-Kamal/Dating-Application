@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatingApplication.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190620114037_ExtendedUserClass")]
-    partial class ExtendedUserClass
+    [Migration("20190621181122_UserClassExtended")]
+    partial class UserClassExtended
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -54,6 +54,8 @@ namespace DatingApplication.Migrations
                     b.Property<DateTime>("DateOfBirth");
 
                     b.Property<string>("Gender");
+
+                    b.Property<string>("Interests");
 
                     b.Property<string>("Introduction");
 

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DatingApplication.Migrations
 {
-    public partial class ExtendedUserClass : Migration
+    public partial class UserClassExtended : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,6 +31,11 @@ namespace DatingApplication.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "Gender",
+                table: "Users",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Interests",
                 table: "Users",
                 nullable: true);
 
@@ -107,6 +112,10 @@ namespace DatingApplication.Migrations
 
             migrationBuilder.DropColumn(
                 name: "Gender",
+                table: "Users");
+
+            migrationBuilder.DropColumn(
+                name: "Interests",
                 table: "Users");
 
             migrationBuilder.DropColumn(
