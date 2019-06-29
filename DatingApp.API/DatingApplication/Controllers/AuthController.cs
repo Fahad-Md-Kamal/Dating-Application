@@ -33,17 +33,17 @@ namespace DatingApplication.Controllers
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
             userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
+            
             if (await _repo.UserExists(userForRegisterDto.Username))
                 return BadRequest("Username Already Exist");
 
-            var userToCreate = new User
-            {
-                Username = userForRegisterDto.Username
-            };
+            var userToCreate = _mapper.Map<User>(userForRegisterDto);
 
             var createdUser = await _repo.Register(userToCreate, userForRegisterDto.Password);
 
-            return StatusCode(201);
+            var userToReturn = _mapper.Map<UserForDetailsDto>(createdUser);
+
+            return CreatedAtRoute("GetUser", new {Controller = "Users", Id = createdUser.Id}, userToReturn);
         }
 
 
