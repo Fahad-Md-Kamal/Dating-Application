@@ -1,5 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace DatingApplication.Helpers
 {
@@ -10,6 +12,17 @@ namespace DatingApplication.Helpers
             respon.Headers.Add("Application-Error", message);
             respon.Headers.Add("Access-Control-Expose-Headers", "Application-Error");
             respon.Headers.Add("Access-Control-Allow-Origin", "*");
+        }
+
+        public static void AddPagination(this HttpResponse respon,
+                 int currentPage, int itemsPerPage, int totalItems, int totalPages)
+        {
+            var paginationHeader = new PaginationHeader(currentPage, itemsPerPage, totalItems, totalPages);
+            var camelCaseFormatter = new JsonSerializerSettings();
+            camelCaseFormatter.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            respon.Headers.Add("Pagination", 
+                JsonConvert.SerializeObject(paginationHeader, camelCaseFormatter));
+            respon.Headers.Add("Access-Control-Expose-Headers", "Pagination");
         }
 
 
