@@ -14,5 +14,6 @@ namespace DatingApplication.Data
          Task<User> GetUser(int id);
          Task<Photo> GetPhoto(int Id);
          Task<Photo> GetMainPhotoForUser(int userId);
+         Task<Like> GetLike(int UserId, int recipentId);
     }
 }
