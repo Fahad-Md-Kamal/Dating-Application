@@ -12,7 +12,7 @@ import { AuthService } from 'src/app/_services/auth.service';
   styleUrls: ['./member-edit.component.css']
 })
 export class MemberEditComponent implements OnInit {
-  @ViewChild('editForm', {read: NgForm, static: false} ) editForm: NgForm;
+  @ViewChild('editForm', {static: false} ) editForm: NgForm;
   user: User;
   photoUrl: string;
   @HostListener('window:beforeunload', ['$event'])
