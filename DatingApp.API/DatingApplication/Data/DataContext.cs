@@ -1,4 +1,6 @@
 ﻿using DatingApplication.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace DatingApplication.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<User, Role, int,
+        IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>,
+        IdentityRoleClaim<int>, IdentityUserToken<int>> 
+        // To pass integer this all were written.. But if I want to pass string I need only to pass user, role and userRole class.
     {
         public DataContext( DbContextOptions<DataContext> options) : base(options){}
-
         public DbSet<Value> Values { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Message> Messages { get; set; }
@@ -20,6 +23,24 @@ namespace DatingApplication.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+
+            builder.Entity<UserRole>(userRole => 
+            {
+                userRole.HasKey(ur => new {ur.UserId, ur.RoleId});
+
+                userRole.HasOne(ur => ur.Role)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey( ur => ur.RoleId)
+                    .IsRequired();
+
+                userRole.HasOne(ur => ur.User)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey( ur => ur.UserId)
+                    .IsRequired();
+            });
+
+
             builder.Entity<Like>()
                 .HasKey(k => new { k.LikerId, k.LikeeId });
             
@@ -44,6 +65,10 @@ namespace DatingApplication.Data
                 .HasOne(u => u.Recipent)
                 .WithMany(m => m.MessageReceived)
                 .OnDelete(DeleteBehavior.Restrict);
+
+
+            // Will not return the data where Query filter is applied;
+            builder.Entity<Photo>().HasQueryFilter(p => p.IsApproved); 
         }
 
     }

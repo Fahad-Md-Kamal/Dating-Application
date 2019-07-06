@@ -33,6 +33,8 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { ListsResolver } from './_resolver/lists.resolver';
 import { MessagesResolver } from './_resolver/messages.resolver';
 import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { HasRoleDirective } from './_diractives/hasRole.directive';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -52,7 +54,9 @@ export function tokenGetter() {
       MemberEditComponent,
       PhotoEditorComponent,
       TimeAgoPipe,
-      MemberMessagesComponent
+      MemberMessagesComponent,
+      AdminPanelComponent,
+      HasRoleDirective
    ],
    imports: [
       BrowserModule,
@@ -73,8 +77,8 @@ export function tokenGetter() {
             whitelistedDomains: ['localhost:5000'],
             blacklistedRoutes: ['localhost:5000/api/auth']
          }
-      })
-   ],
+         }),
+      ],
    providers: [
       AuthService,
       ErrorInterceptorProvider,

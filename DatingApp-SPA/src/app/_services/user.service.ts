@@ -22,29 +22,29 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUsers(page?, itemsPerPage?, userParams?, likesParam?): Observable<PaginatedResult<User[]>> {
-    
+
     const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
 
     let params = new HttpParams();
 
-    if(page != null && itemsPerPage != null){
+    if (page != null && itemsPerPage != null) {
       params = params.append('pageNumber', page);
       params = params.append('pageSize', itemsPerPage);
     }
 
-    if (userParams != null){
+    if (userParams != null) {
       params = params.append('minAge', userParams.minAge);
       params = params.append('maxAge', userParams.maxAge);
       params = params.append('gender', userParams.gender);
       params = params.append('orderBy', userParams.orderBy);
     }
 
-    if(likesParam === 'Likers') {
+    if (likesParam === 'Likers') {
       params = params.append('likers', 'true');
     }
 
-    
-    if(likesParam === 'Likees') {
+
+    if (likesParam === 'Likees') {
       params = params.append('likees', 'true');
     }
 
@@ -53,7 +53,7 @@ export class UserService {
         map(response => {
           paginatedResult.result = response.body;
           if (response.headers.get('Pagination') != null) {
-            paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'))
+            paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
           }
           return paginatedResult;
         })
@@ -83,12 +83,12 @@ export class UserService {
 
   getMessages(id: number, page?, itemsPerPage?, messgeContainer?) {
     const paginatedResult: PaginatedResult<Message[]> = new PaginatedResult<Message[]>();
-    
+
     let params = new HttpParams();
 
     params = params.append('MessageContainer', messgeContainer);
-    
-    if(page != null && itemsPerPage != null){
+
+    if (page != null && itemsPerPage != null) {
       params = params.append('pageNumber', page);
       params = params.append('pageSize', itemsPerPage);
     }
@@ -107,7 +107,7 @@ export class UserService {
   }
 
   getMessageThread(id: number, recepientId: number) {
-    return this.http.get<Message[]>(this.baseUrl + 'users/' + id +'/messages/thread/' + recepientId)
+    return this.http.get<Message[]>(this.baseUrl + 'users/' + id + '/messages/thread/' + recepientId );
   }
 
   sendMessage(id: number, message: Message) {
@@ -116,7 +116,7 @@ export class UserService {
 
 
   deleteMessage(id: number, userId: number) {
-    return this.http.post(this.baseUrl + 'users/' + userId + '/messages/' + id, {})
+    return this.http.post(this.baseUrl + 'users/' + userId + '/messages/' + id, {});
   }
 
 

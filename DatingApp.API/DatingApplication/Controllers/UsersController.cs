@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DatingApplication.Controllers
 {
     [ServiceFilter(typeof(LogUserActivity))]
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -26,13 +25,15 @@ namespace DatingApplication.Controllers
             _repo = repo;
         }
 
+
+
         [HttpGet]
         public async Task<IActionResult> GetUsers([FromQuery]UserParams userParams)
         {
 
             var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            var userFromRepo = await _repo.GetUser(currentUserId);
+            var userFromRepo = await _repo.GetUser(currentUserId, true);
 
             userParams.UserId = currentUserId;
 
@@ -50,15 +51,21 @@ namespace DatingApplication.Controllers
             return Ok(usersToReturn);
         }
 
+
+
         [HttpGet("{id}", Name = "GetUser")]
         public async Task<IActionResult> GetUser(int id)
         {
-            var user = await _repo.GetUser(id);
+            var isCurrentUser = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) == id;
+
+            var user = await _repo.GetUser(id, isCurrentUser);
 
             var userToReturn = _mapper.Map<UserForDetailsDto>(user);
 
             return Ok(userToReturn);
         }
+
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
@@ -66,7 +73,7 @@ namespace DatingApplication.Controllers
             if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                 return Unauthorized();
             
-            var userFromRepo = await _repo.GetUser(id);
+            var userFromRepo = await _repo.GetUser(id, true);
 
             _mapper.Map(userForUpdateDto, userFromRepo);
 
@@ -75,6 +82,9 @@ namespace DatingApplication.Controllers
                 
             throw new Exception($"Updating user {id} failed on save");
         }
+
+
+
 
         [HttpPost("{id}/Like/{recipentId}")]
         public async Task<IActionResult> LikeUser(int id, int recipentId)
@@ -87,7 +97,7 @@ namespace DatingApplication.Controllers
             if (like != null)
                 return BadRequest("You already liked this user");
 
-            if (await _repo.GetUser(recipentId) == null)
+            if (await _repo.GetUser(recipentId, true) == null)
                 return NotFound();
 
             like = new Like

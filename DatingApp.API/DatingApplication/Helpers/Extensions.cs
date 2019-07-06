@@ -14,8 +14,7 @@ namespace DatingApplication.Helpers
             respon.Headers.Add("Access-Control-Allow-Origin", "*");
         }
 
-        public static void AddPagination(this HttpResponse respon,
-                 int currentPage, int itemsPerPage, int totalItems, int totalPages)
+        public static void AddPagination(this HttpResponse respon, int currentPage, int itemsPerPage, int totalItems, int totalPages)
         {
             var paginationHeader = new PaginationHeader(currentPage, itemsPerPage, totalItems, totalPages);
             var camelCaseFormatter = new JsonSerializerSettings();

@@ -27,7 +27,7 @@ export class MemeberDetailComponent implements OnInit {
     });
 
     this.route.queryParams.subscribe(params => {
-      const selectedTab = params['tab'];
+      const selectedTab = params.tab;
       this.memberTabs.tabs[selectedTab > 0 ? selectedTab : 0].active = true;
     });
 
